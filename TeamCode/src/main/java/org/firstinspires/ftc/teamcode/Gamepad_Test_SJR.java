@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 @TeleOp()
-;\public class amepad_Test_SJR extends OpMode {
+;public class Gamepad_Test_SJR extends OpMode {
     @Override
     public void init() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
