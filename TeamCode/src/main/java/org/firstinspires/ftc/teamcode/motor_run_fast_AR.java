@@ -29,4 +29,3 @@ public class motor_run_fast_AR extends OpMode {
         telemetry.update();
     }
 }
-
