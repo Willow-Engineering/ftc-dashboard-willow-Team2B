@@ -9,11 +9,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp()
 public class KyExcersise extends OpMode {
 
-    private DcMotor Motor2;
+    private DcMotor Motor1;
     @Override
     public void init() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        Motor1  = hardwareMap.get(DcMotor.class, "testMotor1");
 
     }
 
@@ -27,7 +28,7 @@ public class KyExcersise extends OpMode {
 
         double speedForward = -gamepad1.left_stick_y / 2.0;
         if (gamepad1.left_stick_y < 0.5) {
-            Motor2.setPower(1);
+            Motor1.setPower(1);
             telemetry.addData("Left stick", " is negative and large");
         }
         else if (gamepad1.left_stick_y < 0) {
