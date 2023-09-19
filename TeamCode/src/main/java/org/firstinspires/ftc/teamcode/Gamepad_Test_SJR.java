@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 @TeleOp()
-;public class Gamepad_Test_SJR extends OpMode {
+public class Gamepad_Test_SJR extends OpMode {
     @Override
     public void init() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -19,6 +19,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
         telemetry.addData("R_stick_y", gamepad1.right_stick_y);
         telemetry.addData("B_button", gamepad1.b);
         telemetry.addData("Difference_Sticks", gamepad1.left_stick_y - gamepad1.right_stick_y);
-        telemetry.addData( "Sum_Trigger", gamepad1.left_trigger + gamepad1.right_trigger);
+        telemetry.addData("Sum_Trigger", gamepad1.left_trigger + gamepad1.right_trigger);
 
     }
+}
