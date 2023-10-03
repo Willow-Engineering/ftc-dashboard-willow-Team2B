@@ -56,6 +56,8 @@ public class Basic_Bot_AR extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+
+    private DcMotor Arm = null;
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
 
@@ -67,6 +69,7 @@ public class Basic_Bot_AR extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
+        Arm = hardwareMap.get(DcMotor.class, "Arm");
         leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
 
@@ -84,6 +87,7 @@ public class Basic_Bot_AR extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
+            double ArmPower;
             double leftPower;
             double rightPower;
 
@@ -92,17 +96,30 @@ public class Basic_Bot_AR extends LinearOpMode {
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
+
             double drive = -gamepad1.left_stick_y;
             double turn  =  gamepad1.right_stick_x;
+
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
+            if(gamepad1.left_bumper);{
+                ArmPower = 0.5;
+            }if(gamepad1.right_bumper);{
+                ArmPower = -0.5;
+            }
+            else{
+                ArmPower = 0;
+            }
+
+
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
 
             // Send calculated power to wheels
+            Arm.setPower(ArmPower);
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
 
