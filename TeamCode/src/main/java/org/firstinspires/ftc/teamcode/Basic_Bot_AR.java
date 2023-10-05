@@ -105,16 +105,15 @@ public class Basic_Bot_AR extends LinearOpMode {
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            if(gamepad1.left_bumper);{
+            if(gamepad1.left_bumper){
                 ArmPower = 0.5;
             }
-            if(gamepad1.right_bumper) {
+            else if(gamepad1.right_bumper) {
                 ArmPower = -0.5;
             }
-            else ;{
+            else{
                 ArmPower = 0;
             }
-
 
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
