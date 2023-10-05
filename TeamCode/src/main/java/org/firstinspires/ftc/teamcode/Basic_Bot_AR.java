@@ -107,10 +107,11 @@ public class Basic_Bot_AR extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             if(gamepad1.left_bumper);{
                 ArmPower = 0.5;
-            }if(gamepad1.right_bumper);{
+            }
+            if(gamepad1.right_bumper) {
                 ArmPower = -0.5;
             }
-            else{
+            else ;{
                 ArmPower = 0;
             }
 
