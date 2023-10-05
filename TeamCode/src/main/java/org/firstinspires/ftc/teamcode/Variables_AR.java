@@ -10,7 +10,7 @@ package org.firstinspires.ftc.teamcode;
 @TeleOp()
 public class Variables_AR extends OpMode {
 
-    i
+
     @Override
     public void init() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
