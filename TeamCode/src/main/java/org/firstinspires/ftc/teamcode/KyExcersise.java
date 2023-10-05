@@ -9,7 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp()
 public class KyExcersise extends OpMode {
 
-    private DcMotor Motor1;
+    private DcMotor M
+        Motor1;
     @Override
     public void init() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
