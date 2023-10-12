@@ -67,10 +67,10 @@ public class Basic_Bot_AR extends LinearOpMode {
     private Servo rightServo = null;
     private Servo leftServo = null;
 
-    public static double rightServoPosOpen = 60;
-    public static double leftServoPosOpen = 60;
+    public static double rightServoPosOpen = 30;
+    public static double leftServoPosOpen = 0;
     public static double rightServoPosClose = 0;
-    public static double leftServoPosClose = 0;
+    public static double leftServoPosClose = 20;
 
     @Override
     public void runOpMode() {
