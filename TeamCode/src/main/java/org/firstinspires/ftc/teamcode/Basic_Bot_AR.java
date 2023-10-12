@@ -29,10 +29,13 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -51,6 +54,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Basic_Bot_AR")
+@Config
 //@Disabled
 public class Basic_Bot_AR extends LinearOpMode {
 
@@ -60,6 +64,13 @@ public class Basic_Bot_AR extends LinearOpMode {
     private DcMotor Arm = null;
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private Servo rightServo = null;
+    private Servo leftServo = null;
+
+    public static double rightServoPosOpen = 60;
+    public static double leftServoPosOpen = 60;
+    public static double rightServoPosClose = 0;
+    public static double leftServoPosClose = 0;
 
     @Override
     public void runOpMode() {
@@ -72,6 +83,8 @@ public class Basic_Bot_AR extends LinearOpMode {
         Arm = hardwareMap.get(DcMotor.class, "Arm");
         leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
+        rightServo = hardwareMap.get(Servo.class, "rightServo");
+        leftServo = hardwareMap.get(Servo.class, "leftServo");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -91,6 +104,8 @@ public class Basic_Bot_AR extends LinearOpMode {
             double leftPower;
             double rightPower;
 
+
+
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
 
@@ -106,7 +121,7 @@ public class Basic_Bot_AR extends LinearOpMode {
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             if(gamepad1.left_bumper){
-                ArmPower = 0.5;
+                ArmPower = 0.2;
             }
             else if(gamepad1.right_bumper) {
                 ArmPower = -0.5;
@@ -114,6 +129,17 @@ public class Basic_Bot_AR extends LinearOpMode {
             else{
                 ArmPower = 0;
             }
+            if(gamepad1.dpad_up){
+                rightServo.setPosition(rightServoPosOpen);
+                leftServo.setPosition(leftServoPosOpen);
+            }
+            if(gamepad1.dpad_down){
+                rightServo.setPosition(rightServoPosClose);
+                leftServo.setPosition(leftServoPosClose);
+
+            }
+
+
 
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
