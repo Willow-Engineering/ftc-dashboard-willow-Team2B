@@ -29,11 +29,14 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -61,7 +64,7 @@ public class Basic_Bot_AR extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor Arm = null;
+    private DcMotorEx Arm = null;
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private Servo rightServo = null;
@@ -72,6 +75,10 @@ public class Basic_Bot_AR extends LinearOpMode {
     public static double rightServoPosClose = 0;
     public static double leftServoPosClose = 20;
 
+    public static int ArmPosition = -500;
+    public static int ArmPosition2 = -10;
+    public static int ArmPosition3 = -200;
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -80,7 +87,7 @@ public class Basic_Bot_AR extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        Arm = hardwareMap.get(DcMotor.class, "Arm");
+        Arm = hardwareMap.get(DcMotorEx.class, "Arm");
         leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
         rightServo = hardwareMap.get(Servo.class, "rightServo");
@@ -95,15 +102,17 @@ public class Basic_Bot_AR extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double ArmPower;
+            double ArmPower = 0;
             double leftPower;
             double rightPower;
-
 
 
             // Choose to drive using either Tank Mode, or POV Mode
@@ -120,15 +129,16 @@ public class Basic_Bot_AR extends LinearOpMode {
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            if(gamepad1.left_bumper){
-                ArmPower = 0.2;
-            }
-            else if(gamepad1.right_bumper) {
-                ArmPower = -0.5;
-            }
-            else{
-                ArmPower = 0;
-            }
+//            if(gamepad1.left_bumper){
+//                ArmPower = 0.4;
+//            }
+//            else if(gamepad1.right_bumper) {
+//                ArmPower = -0.4;
+//            }
+//            else{
+//                ArmPower = 0;
+//
+//            }
             if(gamepad1.dpad_up){
                 rightServo.setPosition(rightServoPosOpen);
                 leftServo.setPosition(leftServoPosOpen);
@@ -138,18 +148,32 @@ public class Basic_Bot_AR extends LinearOpMode {
                 leftServo.setPosition(leftServoPosClose);
 
             }
-
-
+if(gamepad1.a){
+    Arm.setTargetPosition(ArmPosition);
+    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    Arm.setVelocity(300);
+}
+if(gamepad1.b){
+    Arm.setTargetPosition(ArmPosition2);
+    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    Arm.setVelocity(300);
+}
+if(gamepad1.y){
+    Arm.setTargetPosition(ArmPosition3);
+    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    Arm.setVelocity(300);
+}
 
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
 
             // Send calculated power to wheels
-            Arm.setPower(ArmPower);
+            //Arm.setPower(ArmPower);
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
 
             // Show the elapsed game time and wheel power.
+            telemetry.addData("Current Arm Position", Arm.getCurrentPosition());
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.update();
