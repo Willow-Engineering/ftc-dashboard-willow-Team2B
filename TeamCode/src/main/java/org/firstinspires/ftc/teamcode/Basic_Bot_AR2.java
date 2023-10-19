@@ -32,12 +32,10 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -56,10 +54,10 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic_Bot_AR")
+@TeleOp(name="Basic_Bot_AR2")
 @Config
 //@Disabled
-public class Basic_Bot_AR extends LinearOpMode {
+public class Basic_Bot_AR2 extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -78,7 +76,6 @@ public class Basic_Bot_AR extends LinearOpMode {
     public static int ArmPosition = -500;
     public static int ArmPosition2 = -10;
     public static int ArmPosition3 = -200;
-
 
     @Override
     public void runOpMode() {
@@ -157,30 +154,10 @@ if(gamepad1.a){
 if(gamepad1.b){
     Arm.setTargetPosition(ArmPosition2);
     Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    Arm.setVelocity(600);
+    Arm.setVelocity(300);
 }
 if(gamepad1.y){
     Arm.setTargetPosition(ArmPosition3);
-    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    Arm.setVelocity(600);
-}
-if(gamepad1.left_bumper){
-    Arm.setTargetPosition(Arm.getCurrentPosition()+10);
-    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    Arm.setVelocity(300);
-}
-if(gamepad1.right_bumper){
-    Arm.setTargetPosition(Arm.getCurrentPosition()-10);
-    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    Arm.setVelocity(300);
-}
-if(gamepad1.left_trigger>0){
-    Arm.setTargetPosition(Arm.getCurrentPosition()+25);
-    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    Arm.setVelocity(300);
-}
-if(gamepad1.right_trigger>0){
-    Arm.setTargetPosition(Arm.getCurrentPosition()-25);
     Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     Arm.setVelocity(300);
 }
