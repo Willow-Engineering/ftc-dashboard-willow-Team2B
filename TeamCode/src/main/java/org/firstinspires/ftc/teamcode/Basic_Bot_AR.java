@@ -38,6 +38,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -74,6 +76,18 @@ public class Basic_Bot_AR extends LinearOpMode {
     public static double leftServoPosOpen = 0;
     public static double rightServoPosClose = 0;
     public static double leftServoPosClose = 20;
+    static final double     COUNTS_PER_MOTOR_REV    = 288;
+    static final double     GEAR_REDUCTION    = 2.7778;
+    static final double     COUNTS_PER_GEAR_REV    = COUNTS_PER_MOTOR_REV * GEAR_REDUCTION;
+    static final double     COUNTS_PER_DEGREE    = COUNTS_PER_GEAR_REV/360;
+
+    private DcMotor arm;
+    private Servo claw;
+    private Gyroscope imu;
+    private DcMotor leftmotor;
+    private DcMotor rightmotor;
+    private DigitalChannel touch;
+
 
     public static int ArmPosition = -500;
     public static int ArmPosition2 = -10;
@@ -88,8 +102,13 @@ public class Basic_Bot_AR extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
+<<<<<<< HEAD
+        Arm = hardwareMap.get(DcMotor.class, "Arm");
+        leftDrive = hardwareMap.get(DcMotor.class, "leftDrive");
+=======
         Arm = hardwareMap.get(DcMotorEx.class, "Arm");
         leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
+>>>>>>> 71b5559720ded0d79d92986ff7a761ea6add3b29
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
         rightServo = hardwareMap.get(Servo.class, "rightServo");
         leftServo = hardwareMap.get(Servo.class, "leftServo");
@@ -108,9 +127,26 @@ public class Basic_Bot_AR extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         // run until the end of the match (driver presses STOP)
+        double leftPower;
+        double rightPower;
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
+<<<<<<< HEAD
+            double ArmPower;
+
+
+            arm = hardwareMap.get(DcMotor.class, "arm");
+            claw = hardwareMap.get(Servo.class, "claw");
+            imu = hardwareMap.get(Gyroscope.class, "imu");
+            leftmotor = hardwareMap.get(DcMotor.class, "leftmotor");
+            rightmotor = hardwareMap.get(DcMotor.class, "rightmotor");
+            touch = hardwareMap.get(DigitalChannel.class, "touch");
+
+            int minPosition = 0;
+            int maxPosition = (int) (COUNTS_PER_DEGREE * 45);
+            waitForStart();
+=======
             double ArmPower = 0;
             double leftPower;
             double rightPower;
@@ -118,13 +154,29 @@ public class Basic_Bot_AR extends LinearOpMode {
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
+>>>>>>> 71b5559720ded0d79d92986ff7a761ea6add3b29
 
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
+            while (opModeIsActive()) {
 
+<<<<<<< HEAD
+                if (gamepad1.left_bumper && arm.getCurrentPosition() < maxPosition) {
+                    arm.setPower(0.5);
+                } else if (gamepad1.right_bumper && arm.getCurrentPosition() > minPosition) {
+                    arm.setPower(-0.5);
+                } else if (gamepad1.a) {
+                    arm.setPower(-0.5);
+                } else {
+                    arm.setPower(0);
+                }
+                if (!touch.getState()) {
+                    arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                }
+                telemetry.addData("Arm Test", arm.getCurrentPosition());
+                telemetry.update();
+            }
+=======
             double drive = -gamepad1.left_stick_y;
             double turn  =  gamepad1.right_stick_x;
-
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
@@ -198,6 +250,61 @@ if(gamepad1.right_trigger>0){
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.update();
+>>>>>>> 71b5559720ded0d79d92986ff7a761ea6add3b29
         }
+
+
+        // Choose to drive using either Tank Mode, or POV Mode
+        // Comment out the method that's not used.  The default below is POV.
+
+        // POV Mode uses left stick to go forward, and right stick to turn.
+        // - This uses basic math to combine motions and is easier to drive straight.
+
+        double drive = -gamepad1.left_stick_y;
+        double turn = gamepad1.right_stick_x;
+
+        leftPower = Range.clip(drive + turn, -1.0, 1.0);
+        rightPower = Range.clip(drive - turn, -1.0, 1.0);
+
+        // Tank Mode uses one stick to control each wheel.
+        // - This requires no math, but it is hard to drive forward slowly and keep straight.
+        double ArmPower;
+        if (gamepad1.left_bumper) {
+            ArmPower = 0.2;
+            Arm.setTargetPosition(83);
+            Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        } else if (gamepad1.right_bumper) {
+            ArmPower = -0.5;
+            Arm.setTargetPosition(0);
+            Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else {
+            ArmPower = 0;
+        }
+        if (gamepad1.dpad_up) {
+            rightServo.setPosition(rightServoPosOpen);
+            leftServo.setPosition(leftServoPosOpen);
+        }
+        if (gamepad1.dpad_down) {
+            rightServo.setPosition(rightServoPosClose);
+            leftServo.setPosition(leftServoPosClose);
+
+        }
+
+
+        // leftPower  = -gamepad1.left_stick_y ;
+        // rightPower = -gamepad1.right_stick_y ;
+
+        // Send calculated power to wheels
+        Arm.setPower(ArmPower);
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
+
+        // Show the elapsed game time and wheel power.
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        telemetry.update();
     }
-}
+    }
+
