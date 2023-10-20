@@ -86,7 +86,7 @@ public class Basic_Bot_AR2 extends LinearOpMode {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         Arm = hardwareMap.get(DcMotorEx.class, "Arm");
-        leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
+        leftDrive = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
         rightServo = hardwareMap.get(Servo.class, "rightServo");
         leftServo = hardwareMap.get(Servo.class, "leftServo");
@@ -120,10 +120,10 @@ public class Basic_Bot_AR2 extends LinearOpMode {
             // - This uses basic math to combine motions and is easier to drive straight.
 
             double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
+            double turn = gamepad1.right_stick_x;
 
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+            leftPower = Range.clip(drive + turn, -1.0, 1.0);
+            rightPower = Range.clip(drive - turn, -1.0, 1.0);
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -137,44 +137,63 @@ public class Basic_Bot_AR2 extends LinearOpMode {
 //                ArmPower = 0;
 //
 //            }
-            if(gamepad1.dpad_up){
+            if (gamepad1.dpad_up) {
                 rightServo.setPosition(rightServoPosOpen);
                 leftServo.setPosition(leftServoPosOpen);
             }
-            if(gamepad1.dpad_down){
+            if (gamepad1.dpad_down) {
                 rightServo.setPosition(rightServoPosClose);
                 leftServo.setPosition(leftServoPosClose);
 
             }
-if(gamepad1.a){
-    Arm.setTargetPosition(ArmPosition);
-    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    Arm.setVelocity(300);
-}
-if(gamepad1.b){
-    Arm.setTargetPosition(ArmPosition2);
-    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    Arm.setVelocity(300);
-}
-if(gamepad1.y){
-    Arm.setTargetPosition(ArmPosition3);
-    Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    Arm.setVelocity(300);
-}
+            if (gamepad1.a) {
+                Arm.setTargetPosition(ArmPosition);
+                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Arm.setVelocity(300);
+            }
+            if (gamepad1.b) {
+                Arm.setTargetPosition(ArmPosition2);
+                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Arm.setVelocity(300);
+            }
+            if (gamepad1.y) {
+                Arm.setTargetPosition(ArmPosition3);
+                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Arm.setVelocity(300);
+            }
+            if (gamepad1.left_bumper) {
+                Arm.setTargetPosition(Arm.getCurrentPosition() + 10);
+                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Arm.setVelocity(300);
+            }
+            if (gamepad1.right_bumper) {
+                Arm.setTargetPosition(Arm.getCurrentPosition() - 10);
+                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Arm.setVelocity(300);
+            }
+            if (gamepad1.left_trigger > 0) {
+                Arm.setTargetPosition(Arm.getCurrentPosition() + 25);
+                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Arm.setVelocity(300);
+            }
+            if (gamepad1.right_trigger > 0) {
+                Arm.setTargetPosition(Arm.getCurrentPosition() - 25);
+                Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Arm.setVelocity(300);
+            }
+                // leftPower  = -gamepad1.left_stick_y ;
+                // rightPower = -gamepad1.right_stick_y ;
 
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
+                // Send calculated power to wheels
+                //Arm.setPower(ArmPower);
+                leftDrive.setPower(leftPower);
+                rightDrive.setPower(rightPower);
 
-            // Send calculated power to wheels
-            //Arm.setPower(ArmPower);
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Current Arm Position", Arm.getCurrentPosition());
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
+                // Show the elapsed game time and wheel power.
+                telemetry.addData("Current Arm Position", Arm.getCurrentPosition());
+                telemetry.addData("Status", "Run Time: " + runtime.toString());
+                telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+                telemetry.update();
+            }
         }
     }
-}
