@@ -102,7 +102,7 @@ public class Basic_Bot_AR2 extends LinearOpMode {
         leftServo = hardwareMap.get(Servo.class, "leftServo");
 
         sensorRange = hardwareMap.get(DistanceSensor.class, "sensor_range");
-        Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
+
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -119,9 +119,6 @@ public class Basic_Bot_AR2 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            telemetry.addData("Rev2mDistanceSensor",((Rev2mDistanceSensor) sensorRange).getDeviceClient());
-            telemetry.addData("ID", String.format("%x", sensorTimeOfFlight.getModelID()));
-            telemetry.addData("did time out", Boolean.toString(sensorTimeOfFlight.didTimeoutOccur()));
             // Setup a variable for each drive wheel to save power level for telemetry
             double ArmPower = 0;
             double leftPower;
@@ -196,7 +193,7 @@ public class Basic_Bot_AR2 extends LinearOpMode {
                 Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Arm.setVelocity(300);
             }
-            if (sensorRange.getDistance(DistanceUnit.CM) < 2) {
+            if (sensorRange.getDistance(DistanceUnit.CM) < 1) {
                 rightServo.setPosition(rightServoPosClose);
                 leftServo.setPosition(leftServoPosClose);
             }
@@ -216,6 +213,7 @@ public class Basic_Bot_AR2 extends LinearOpMode {
             telemetry.addData("range", String.format("%.01f in", sensorRange.getDistance(DistanceUnit.INCH)));
 
             // Rev2mDistanceSensor specific methods.
+            telemetry.addData("Rev2mDistanceSensor",((Rev2mDistanceSensor) sensorRange).getDeviceClient());
             telemetry.addData("ID", String.format("%x", sensorTimeOfFlight.getModelID()));
             telemetry.addData("did time out", Boolean.toString(sensorTimeOfFlight.didTimeoutOccur()));
                 telemetry.addData("Current Arm Position", Arm.getCurrentPosition());
