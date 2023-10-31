@@ -193,7 +193,7 @@ public class Basic_Bot_AR2 extends LinearOpMode {
                 Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Arm.setVelocity(300);
             }
-            if (distance < 1) {
+            if (distance < 50) {
                 rightServo.setPosition(rightServoPosClose);
                 leftServo.setPosition(leftServoPosClose);
             }
