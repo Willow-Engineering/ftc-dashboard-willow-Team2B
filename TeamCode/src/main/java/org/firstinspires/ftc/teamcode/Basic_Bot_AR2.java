@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -80,6 +81,9 @@ public class Basic_Bot_AR2 extends LinearOpMode {
     public static double rightServoPosClose = 0;
     public static double leftServoPosClose = 20;
 
+    public static double rightServoPosOpen2 = 30;
+    public static double leftServoPosOpen2 = 0;
+
     public static int ArmPosition = -500;
     public static int ArmPosition2 = -10;
     public static int ArmPosition3 = -200;
@@ -90,8 +94,6 @@ public class Basic_Bot_AR2 extends LinearOpMode {
         telemetry.addData(">>", "Press start to continue");
         telemetry.update();
 
-        Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor)sensorRange;
-
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -100,8 +102,7 @@ public class Basic_Bot_AR2 extends LinearOpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
         rightServo = hardwareMap.get(Servo.class, "rightServo");
         leftServo = hardwareMap.get(Servo.class, "leftServo");
-
-        sensorRange = hardwareMap.get(DistanceSensor.class, "sensor_range");
+        sensorRange = hardwareMap.get(DistanceSensor.class, "sensorRange");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -115,6 +116,7 @@ public class Basic_Bot_AR2 extends LinearOpMode {
         Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        boolean test = false;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -123,6 +125,8 @@ public class Basic_Bot_AR2 extends LinearOpMode {
             double ArmPower = 0;
             double leftPower;
             double rightPower;
+            double distance = sensorRange.getDistance(DistanceUnit.MM);
+
 
 
             // Choose to drive using either Tank Mode, or POV Mode
@@ -193,9 +197,10 @@ public class Basic_Bot_AR2 extends LinearOpMode {
                 Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Arm.setVelocity(300);
             }
-            if (sensorRange.getDistance(DistanceUnit.CM) < 1) {
-                rightServo.setPosition(rightServoPosClose);
-                leftServo.setPosition(leftServoPosClose);
+            if (distance < 1) {
+                rightServoPosOpen.setPosition(rightServoPosOpen2);
+                leftServoPosOpen.setPosition(leftServoPosClose2);
+                test = true;
             }
                 // leftPower  = -gamepad1.left_stick_y ;
                 // rightPower = -gamepad1.right_stick_y ;
@@ -207,18 +212,14 @@ public class Basic_Bot_AR2 extends LinearOpMode {
 
                 // Show the elapsed game time and wheel power.
             telemetry.addData("deviceName",sensorRange.getDeviceName() );
-            telemetry.addData("range", String.format("%.01f mm", sensorRange.getDistance(DistanceUnit.MM)));
-            telemetry.addData("range", String.format("%.01f cm", sensorRange.getDistance(DistanceUnit.CM)));
-            telemetry.addData("range", String.format("%.01f m", sensorRange.getDistance(DistanceUnit.METER)));
-            telemetry.addData("range", String.format("%.01f in", sensorRange.getDistance(DistanceUnit.INCH)));
+            telemetry.addData("range", String.format("%.01f m", sensorRange.getDistance(DistanceUnit.MM)));
 
             // Rev2mDistanceSensor specific methods.
-            telemetry.addData("Rev2mDistanceSensor",((Rev2mDistanceSensor) sensorRange).getDeviceClient());
-            telemetry.addData("ID", String.format("%x", sensorTimeOfFlight.getModelID()));
-            telemetry.addData("did time out", Boolean.toString(sensorTimeOfFlight.didTimeoutOccur()));
+           // telemetry.addData("Rev2mDistanceSensor",((Rev2mDistanceSensor) sensorRange).getDeviceClient());
                 telemetry.addData("Current Arm Position", Arm.getCurrentPosition());
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
                 telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+                telemetry.addData("Is it close?", test);
                 telemetry.update();
 
 
