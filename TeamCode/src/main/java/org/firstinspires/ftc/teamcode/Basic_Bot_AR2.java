@@ -74,6 +74,11 @@ public class Basic_Bot_AR2 extends LinearOpMode {
     private Servo rightServo = null;
     private Servo leftServo = null;
 
+    private Servo rightServoPosOpen2 = null;
+
+    private Servo leftServoPosOpen2 = null;
+
+
     private DistanceSensor sensorRange;
 
     public static double rightServoPosOpen = 30;
@@ -81,8 +86,6 @@ public class Basic_Bot_AR2 extends LinearOpMode {
     public static double rightServoPosClose = 0;
     public static double leftServoPosClose = 20;
 
-    public static double rightServoPosOpen2 = 30;
-    public static double leftServoPosOpen2 = 0;
 
     public static int ArmPosition = -500;
     public static int ArmPosition2 = -10;
@@ -198,8 +201,8 @@ public class Basic_Bot_AR2 extends LinearOpMode {
                 Arm.setVelocity(300);
             }
             if (distance < 1) {
-                rightServoPosOpen.setPosition(rightServoPosOpen2);
-                leftServoPosOpen.setPosition(leftServoPosClose2);
+                rightServoPosOpen2.setPosition(rightServoPosOpen);
+                leftServoPosOpen2.setPosition(leftServoPosOpen);
                 test = true;
             }
                 // leftPower  = -gamepad1.left_stick_y ;
