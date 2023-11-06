@@ -193,9 +193,11 @@ public class Basic_Bot_AR2 extends LinearOpMode {
                 Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Arm.setVelocity(300);
             }
-            if (distance < 50) {
-                rightServo.setPosition(rightServoPosClose);
-                leftServo.setPosition(leftServoPosClose);
+            while (gamepad1.x) {
+                if (distance < 40) {
+                    rightServo.setPosition(rightServoPosOpen);
+                    leftServo.setPosition(leftServoPosOpen);
+                }
             }
                 // leftPower  = -gamepad1.left_stick_y ;
                 // rightPower = -gamepad1.right_stick_y ;
