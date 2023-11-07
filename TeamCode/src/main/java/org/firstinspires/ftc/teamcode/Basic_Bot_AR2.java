@@ -81,17 +81,14 @@ public class Basic_Bot_AR2 extends LinearOpMode {
     public static double leftServoPosOpen = 0;
     public static double rightServoPosClose = 0;
     public static double leftServoPosClose = 20;
-<<<<<<< HEAD
 
-//    public static double rightServoPosOpen2 = 0;
-//    public static double leftServoPosOpen2 = 20;
-//
+   public static double rightServoPosOpen2 = 0;
+  public static double leftServoPosOpen2 = 20;
 
-=======
->>>>>>> 05ecbde4f25ab8de6885eddf6998f29f8e65a197
     public static int ArmPosition = -500;
     public static int ArmPosition2 = -10;
     public static int ArmPosition3 = -200;
+    private static double distance;
 
     @Override
     public void runOpMode() {
@@ -201,28 +198,25 @@ public class Basic_Bot_AR2 extends LinearOpMode {
                 Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Arm.setVelocity(300);
             }
-<<<<<<< HEAD
-//            if (distance < 30) {
-//                rightServo.setPosition(rightServoPosOpen2);
-//                leftServo.setPosition(leftServoPosOpen2);
+
 //
-//            }
+}
 //                 leftPower  = -gamepad1.left_stick_y ;
 //                 rightPower = -gamepad1.right_stick_y ;
 //
 //                 Send calculated power to wheels
 //                Arm.setPower(ArmPower);
-=======
-            if (distance < 50) {
-                rightServo.setPosition(rightServoPosClose);
-                leftServo.setPosition(leftServoPosClose);
+
+            if (1 > distance) {
+                rightServo.setPosition(rightServoPosOpen);
+                leftServo.setPosition(leftServoPosOpen);
             }
                 // leftPower  = -gamepad1.left_stick_y ;
                 // rightPower = -gamepad1.right_stick_y ;
 
                 // Send calculated power to wheels
                 //Arm.setPower(ArmPower);
->>>>>>> 05ecbde4f25ab8de6885eddf6998f29f8e65a197
+
                 leftDrive.setPower(leftPower);
                 rightDrive.setPower(rightPower);
                 telemetry.addData("dpad", gamepad1.dpad_up);
