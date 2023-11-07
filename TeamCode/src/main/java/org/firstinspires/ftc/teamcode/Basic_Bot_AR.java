@@ -33,13 +33,19 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
 /**
@@ -55,7 +61,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic_Bot_AR")
+@TeleOp(name="Basic_Bot_AR2")
 @Config
 //@Disabled
 public class Basic_Bot_AR extends LinearOpMode {
@@ -69,11 +75,12 @@ public class Basic_Bot_AR extends LinearOpMode {
     private Servo rightServo = null;
     private Servo leftServo = null;
 
+    private DistanceSensor sensorRange;
+
     public static double rightServoPosOpen = 30;
     public static double leftServoPosOpen = 0;
     public static double rightServoPosClose = 0;
     public static double leftServoPosClose = 20;
-
     public static int ArmPosition = -500;
     public static int ArmPosition2 = -10;
     public static int ArmPosition3 = -200;
@@ -81,6 +88,7 @@ public class Basic_Bot_AR extends LinearOpMode {
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
+        telemetry.addData(">>", "Press start to continue");
         telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -91,6 +99,7 @@ public class Basic_Bot_AR extends LinearOpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
         rightServo = hardwareMap.get(Servo.class, "rightServo");
         leftServo = hardwareMap.get(Servo.class, "leftServo");
+        sensorRange = hardwareMap.get(DistanceSensor.class, "sensorRange");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -104,6 +113,7 @@ public class Basic_Bot_AR extends LinearOpMode {
         Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        boolean test = false;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -112,6 +122,8 @@ public class Basic_Bot_AR extends LinearOpMode {
             double ArmPower = 0;
             double leftPower;
             double rightPower;
+            double distance = sensorRange.getDistance(DistanceUnit.MM);
+
 
 
             // Choose to drive using either Tank Mode, or POV Mode
@@ -155,12 +167,12 @@ public class Basic_Bot_AR extends LinearOpMode {
             if (gamepad1.b) {
                 Arm.setTargetPosition(ArmPosition2);
                 Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Arm.setVelocity(600);
+                Arm.setVelocity(300);
             }
             if (gamepad1.y) {
                 Arm.setTargetPosition(ArmPosition3);
                 Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Arm.setVelocity(600);
+                Arm.setVelocity(300);
             }
             if (gamepad1.left_bumper) {
                 Arm.setTargetPosition(Arm.getCurrentPosition() + 10);
@@ -182,6 +194,12 @@ public class Basic_Bot_AR extends LinearOpMode {
                 Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Arm.setVelocity(300);
             }
+            while (gamepad1.x) {
+                if (distance < 40) {
+                    rightServo.setPosition(rightServoPosOpen);
+                    leftServo.setPosition(leftServoPosOpen);
+                }
+            }
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
 
@@ -191,10 +209,18 @@ public class Basic_Bot_AR extends LinearOpMode {
             rightDrive.setPower(rightPower);
 
             // Show the elapsed game time and wheel power.
+            telemetry.addData("deviceName",sensorRange.getDeviceName() );
+            telemetry.addData("range", String.format("%.01f m", sensorRange.getDistance(DistanceUnit.MM)));
+
+            // Rev2mDistanceSensor specific methods.
+            // telemetry.addData("Rev2mDistanceSensor",((Rev2mDistanceSensor) sensorRange).getDeviceClient());
             telemetry.addData("Current Arm Position", Arm.getCurrentPosition());
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Is it close?", test);
             telemetry.update();
+
+
         }
     }
 }

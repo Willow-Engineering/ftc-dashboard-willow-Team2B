@@ -81,10 +81,8 @@ public class Basic_Bot_AR2 extends LinearOpMode {
     public static double leftServoPosOpen = 0;
     public static double rightServoPosClose = 0;
     public static double leftServoPosClose = 20;
-
    public static double rightServoPosOpen2 = 0;
   public static double leftServoPosOpen2 = 20;
-
     public static int ArmPosition = -500;
     public static int ArmPosition2 = -10;
     public static int ArmPosition3 = -200;
@@ -207,9 +205,6 @@ public class Basic_Bot_AR2 extends LinearOpMode {
 //                 Send calculated power to wheels
 //                Arm.setPower(ArmPower);
 
-            if (1 > distance) {
-                rightServo.setPosition(rightServoPosOpen);
-                leftServo.setPosition(leftServoPosOpen);
             }
                 // leftPower  = -gamepad1.left_stick_y ;
                 // rightPower = -gamepad1.right_stick_y ;
@@ -217,6 +212,14 @@ public class Basic_Bot_AR2 extends LinearOpMode {
                 // Send calculated power to wheels
                 //Arm.setPower(ArmPower);
 
+
+
+            while (gamepad1.x) {
+                if (distance < 40) {
+                    rightServo.setPosition(rightServoPosOpen);
+                    leftServo.setPosition(leftServoPosOpen);
+                }
+            }
                 leftDrive.setPower(leftPower);
                 rightDrive.setPower(rightPower);
                 telemetry.addData("dpad", gamepad1.dpad_up);
