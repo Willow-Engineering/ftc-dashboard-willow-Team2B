@@ -212,12 +212,12 @@ public class Basic_Bot_AR2 extends LinearOpMode {
             //Arm.setPower(ArmPower);
 
 
-            while (gamepad1.x) {
-                if (distance < 40) {
-                    rightServo.setPosition(rightServoPosOpen);
-                    leftServo.setPosition(leftServoPosOpen);
-                }
-            }
+//            while (gamepad1.x) {
+//                if (distance < 40) {
+//                    rightServo.setPosition(rightServoPosOpen);
+//                    leftServo.setPosition(leftServoPosOpen);
+//                }
+           // }
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
             telemetry.addData("dpad", gamepad1.dpad_up);
