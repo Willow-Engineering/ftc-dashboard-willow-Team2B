@@ -61,7 +61,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic_Bot_AR2")
+@TeleOp(name="Basic_Bot_AR")
 @Config
 //@Disabled
 public class Basic_Bot_AR extends LinearOpMode {
