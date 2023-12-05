@@ -77,8 +77,8 @@ public class Basic_Bot_AR2 extends LinearOpMode {
 
     private DistanceSensor sensorRange;
 
-    public static double rightServoPosOpen = 30;
-    public static double leftServoPosOpen = 0;
+    public static double rightServoPosOpen = 10;
+    public static double leftServoPosOpen = -10;
     public static double rightServoPosClose = 0;
     public static double leftServoPosClose = 20;
     public static double rightServoPosOpen2 = 0;
@@ -134,8 +134,8 @@ public class Basic_Bot_AR2 extends LinearOpMode {
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
 
-            double drive = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
+            double drive = gamepad1.left_stick_y;
+            double turn = -gamepad1.right_stick_x;
 
             leftPower = Range.clip(drive + turn, -1.0, 1.0);
             rightPower = Range.clip(drive - turn, -1.0, 1.0);
@@ -212,12 +212,12 @@ public class Basic_Bot_AR2 extends LinearOpMode {
             //Arm.setPower(ArmPower);
 
 
-//            while (gamepad1.x) {
-//                if (distance < 40) {
-//                    rightServo.setPosition(rightServoPosOpen);
-//                    leftServo.setPosition(leftServoPosOpen);
-//                }
-           // }
+         if(gamepad1.x) {
+             if (distance < 80) {
+                 rightServo.setPosition(rightServoPosClose);
+                 leftServo.setPosition(leftServoPosClose);
+             }
+         }
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
             telemetry.addData("dpad", gamepad1.dpad_up);

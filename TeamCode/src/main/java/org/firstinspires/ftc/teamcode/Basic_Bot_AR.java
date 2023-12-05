@@ -181,6 +181,7 @@ public class Basic_Bot_AR extends LinearOpMode {
             }
             if (gamepad1.right_bumper) {
                 Arm.setTargetPosition(Arm.getCurrentPosition() - 10);
+
                 Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Arm.setVelocity(300);
             }
